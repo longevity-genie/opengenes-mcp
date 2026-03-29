@@ -35,6 +35,10 @@ The Holy Bio MCP framework brings together multiple specialized MCP servers into
 
 Together, these servers provide 50+ specialized bioinformatics functions that can work seamlessly together in AI-driven research workflows. Learn more about the complete framework at [github.com/longevity-genie/holy-bio-mcp](https://github.com/longevity-genie/holy-bio-mcp).
 
+## Hosted deployment
+
+A hosted deployment is available on [Fronteir AI](https://fronteir.ai/mcp/longevity-genie-opengenes-mcp).
+
 ## Usage Example
 
 Here's how the OpenGenes MCP server works in practice with AI assistants:
