@@ -21,8 +21,8 @@
   },
   {
     "question": "Are there any liver-specific interventions that increase lifespan in mice?",
-    "sql": "SELECT HGNC, intervention_method, tissue, lifespan_percent_change_mean, effect_on_lifespan FROM lifespan_change WHERE model_organism = 'mouse' AND effect_on_lifespan = 'increases lifespan' AND tissue = 'liver' ORDER BY lifespan_percent_change_mean DESC",
-    "answer": "Yes, there are liver-specific interventions that have been shown to increase lifespan in mice.\n\nSpecifically, knockout of the IGF1 gene in the liver has been observed to increase lifespan in mice."
+    "sql": "SELECT HGNC, sex, intervention_method, tissue, control_cohort_size, experiment_cohort_size, intervention_way, drug, lifespan_percent_change_mean, lifespan_percent_change_median, lifespan_percent_change_max, significance_mean, significance_median, significance_max, effect_on_lifespan, doi FROM lifespan_change WHERE model_organism = 'mouse' AND effect_on_lifespan = 'increases lifespan' AND tissue = 'liver' ORDER BY COALESCE(lifespan_percent_change_mean, lifespan_percent_change_median, lifespan_percent_change_max) DESC, HGNC, doi, sex",
+    "answer": "The reference snapshot contains two female IGF1 liver-intervention records labeled as increasing lifespan, but their significance differs. For DOI 10.1007/s11357-017-9971-0, the database reports a 16.1% median increase with significance_median = 1; the maximum increase is 2.5% with significance_max = NULL (not reported). For DOI 10.1111/acel.12188, the stored median and maximum changes are +2.9% and +3.9%, both with significance flags of 0: they are not statistically significant and should not be presented as demonstrated lifespan extension. Neither record has a mean change. The latter DOI's survival experiment used congenital LID mice, while its separate tamoxifen-induced iLID cohort had no survival study; the stored inducible/tamoxifen metadata require source correction. These mouse records do not establish human rejuvenation."
   },
   {
     "question": "Which gene-longevity association is confirmed by the greatest number of studies?",
