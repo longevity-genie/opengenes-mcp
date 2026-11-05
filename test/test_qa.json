@@ -25,9 +25,9 @@
     "answer": "Yes, there are liver-specific interventions that have been shown to increase lifespan in mice.\n\nSpecifically, knockout of the IGF1 gene in the liver has been observed to increase lifespan in mice."
   },
   {
-    "question": "Which gene-longevity association is confirmed by the greatest number of studies?",
-    "sql": "SELECT HGNC, COUNT(HGNC) as study_count FROM longevity_associations GROUP BY HGNC ORDER BY study_count DESC LIMIT 1",
-    "answer": "The gene-longevity association confirmed by the greatest number of studies is for the gene **FOXO3**, with 28 studies."
+    "question": "Which genes have the greatest number of distinct publication DOIs in the longevity association records?",
+    "sql": "WITH publication_counts AS (SELECT HGNC, COUNT(DISTINCT LOWER(TRIM(doi))) AS publication_count FROM longevity_associations WHERE doi IS NOT NULL AND TRIM(doi) <> '' GROUP BY HGNC) SELECT HGNC, publication_count FROM publication_counts WHERE publication_count = (SELECT MAX(publication_count) FROM publication_counts) ORDER BY HGNC",
+    "answer": "In the reference database snapshot, **APOE** and **FOXO3** are tied, each with 8 distinct publication DOIs in the longevity association records. Multiple association records can refer to the same publication. DOI counts do not establish independent replication, independent cohorts, causality, or strength of evidence, and these human longevity associations do not demonstrate rejuvenation."
   },
   {
     "question": "What polymorphisms in FOXO3 are associated with human longevity?",

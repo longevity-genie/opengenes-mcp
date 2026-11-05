@@ -342,7 +342,7 @@ You can use MCP inspector with locally built MCP server same way as with uvx.
 * Which genetic intervention led to the greatest increase in lifespan in flies?
 * To what extent did the lifespan increase in mice overexpressing VEGFA?
 * Are there any liver-specific interventions that increase lifespan in mice?
-* Which gene-longevity association is confirmed by the greatest number of studies?
+* Which genes have the greatest number of distinct publication DOIs in the longevity association records?
 * What polymorphisms in FOXO3 are associated with human longevity?
 * In which ethnic groups was the association of the APOE gene with longevity shown?
 * Is the INS gene polymorphism associated with longevity?
