@@ -306,6 +306,34 @@ class TestOpenGenesMCPServer:
                 assert isinstance(example["query"], str)
                 assert example["query"].upper().strip().startswith("SELECT")
 
+    def test_mouse_example_ranks_only_significant_reported_metrics(self):
+        example = next(
+            example for example in OpenGenesMCP.get_example_queries(None)
+            if example["description"].startswith("Mouse studies with")
+        )
+        conn = sqlite3.connect(":memory:")
+        try:
+            conn.execute("""
+                CREATE TABLE lifespan_change (
+                    HGNC TEXT, model_organism TEXT, effect_on_lifespan TEXT,
+                    lifespan_percent_change_mean REAL, lifespan_percent_change_max REAL,
+                    significance_mean INTEGER, significance_max INTEGER
+                )
+            """)
+            conn.executemany("INSERT INTO lifespan_change VALUES (?, ?, '', ?, ?, ?, ?)", [
+                ("MAX_ONLY", "mouse", 80, 9, 0, 1),
+                ("MEAN_ONLY", "mouse", -12, 70, 1, None),
+                ("BOTH", "mouse", 2, 20, 1, 1),
+                ("MISSING_SIGNIFICANT_VALUE", "mouse", None, 90, 1, 0),
+                ("NEITHER", "mouse", 50, 60, 0, None),
+                ("RAT", "rat", 100, 120, 1, 1),
+            ])
+            assert [row[0] for row in conn.execute(example["query"])] == [
+                "BOTH", "MEAN_ONLY", "MAX_ONLY",
+            ]
+        finally:
+            conn.close()
+
     @pytest.mark.asyncio
     async def test_complex_join_query(self, mcp_server):
         """Test complex queries with JOINs."""

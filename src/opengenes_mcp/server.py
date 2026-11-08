@@ -564,9 +564,19 @@ All tables are linked by HGNC gene symbols, allowing for comprehensive cross-tab
             },
             {
                 "category": "Model Organism Studies",
-                "description": "Mouse studies with significant lifespan changes (both mean and max)",
-                "query": "SELECT HGNC, effect_on_lifespan, lifespan_percent_change_mean, lifespan_percent_change_max, significance_mean, significance_max FROM lifespan_change WHERE model_organism = 'mouse' AND (significance_mean = 1 OR significance_max = 1) AND (lifespan_percent_change_mean IS NOT NULL OR lifespan_percent_change_max IS NOT NULL) ORDER BY COALESCE(ABS(lifespan_percent_change_mean), ABS(lifespan_percent_change_max)) DESC",
-                "key_concept": "Filter by significance and show both mean and max when available, order by absolute change magnitude"
+                "description": "Mouse studies with a significant mean or maximum lifespan change",
+                "query": (
+                    "SELECT HGNC, effect_on_lifespan, lifespan_percent_change_mean, "
+                    "lifespan_percent_change_max, significance_mean, significance_max "
+                    "FROM lifespan_change WHERE model_organism = 'mouse' AND ("
+                    "(significance_mean = 1 AND lifespan_percent_change_mean IS NOT NULL) OR "
+                    "(significance_max = 1 AND lifespan_percent_change_max IS NOT NULL)) "
+                    "ORDER BY MAX("
+                    "COALESCE(CASE WHEN significance_mean = 1 THEN ABS(lifespan_percent_change_mean) END, 0), "
+                    "COALESCE(CASE WHEN significance_max = 1 THEN ABS(lifespan_percent_change_max) END, 0)"
+                    ") DESC"
+                ),
+                "key_concept": "Show both metrics with their own significance flags. Rank by the largest absolute significant change."
             },
             
             # Intervention and method analysis
